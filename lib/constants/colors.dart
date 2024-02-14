@@ -5,3 +5,4 @@ const Color lightColor2 = Color(0xFF303F67);
 const Color deepColor = Color(0xFF161616 );
 const Color accentColor = Color(0xFFFFFFFF);
 const Color accentColor2 = Color(0xFFCED9FE);
+const Color accentColor3 = Color(0xFFAA546E);

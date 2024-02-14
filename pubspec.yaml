@@ -24,3 +24,5 @@ flutter:
     - family: Open Sans
       fonts:
         - asset: lib/fonts/OpenSans-Regular.ttf
+  assets:
+    - lib/pics/acc.png
