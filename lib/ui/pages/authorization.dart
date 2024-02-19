@@ -97,7 +97,8 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     children: [
                       ElevatedButton(
                           style: accentedButton,
-                          onPressed: () {},
+                          onPressed: () =>
+                              Navigator.popAndPushNamed(context, '/home'),
                           child: Text(
                             toLogIn,
                             style: labelTextStyle,

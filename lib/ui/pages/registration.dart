@@ -15,6 +15,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           registration,
           style: headerTextStyle,
@@ -38,8 +39,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 children: [
                   Image.asset(
                     'lib/pics/acc.png',
-                    width: MediaQuery.of(context).size.height * 0.2,
-                    height: MediaQuery.of(context).size.height * 0.2,
+                    width: MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   ),
                   const SizedBox(
                     height: 10,

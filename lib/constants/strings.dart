@@ -12,3 +12,5 @@ const String surname = "Фамилия";
 const String name = "Имя";
 const String patronymic = "Отчество";
 const String telephone = "Телефон";
+
+const String toResponse = "Откликнуться";

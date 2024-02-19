@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
+import 'package:idi_rabotai123/constants/strings.dart';
 import 'package:idi_rabotai123/data/vacancy.dart';
 import 'package:idi_rabotai123/themes.dart';
 
@@ -15,6 +16,7 @@ class VacancyPage extends StatelessWidget {
       height: MediaQuery.of(context).size.height,
       color: deepColor,
       child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
           itemCount: vacancyList.length,
           itemBuilder: (context, index) => Column(
                 children: [
@@ -28,23 +30,47 @@ class VacancyPage extends StatelessWidget {
                     ),
                     padding: EdgeInsetsDirectional.all(10),
                     width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.2,
+                    height: MediaQuery.of(context).size.height * 0.3,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              vacancyList[index].title!,
+                              vacancyList[index].title! + index.toString(),
                               style: labelTextStyle2,
                             ),
                             Text(
-                              vacancyList[index].salary.toString(),
+                              vacancyList[index].salary == null
+                                  ? "Бесплатно"
+                                  : vacancyList[index].salary.toString(),
                               style: labelTextStyle2,
                             )
                           ],
+                        ),
+                        Divider(
+                          color: accentColor3,
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: Text(
+                            "wefrkjlbajlbhashbvjdsavjhdsavhjdasvhjadsvhjdsavjhdsavhjdasvjkhasdhjxzc,jkadwshui;acxkmbaswefrkjlbajlbhashbvjdsavjhdsavhjdasvhjadsvhjdsavjhdsavhjdasvjkhasdhjxzc,jkadwshui;acxkmbas",
+                            style: labelTextStyle,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
+                                style: accentedButton,
+                                onPressed: () {},
+                                child: Text(
+                                  toResponse,
+                                  style: labelTextStyle2,
+                                ))
+                          ],
                         )
-                        
                       ],
                     ),
                   ),

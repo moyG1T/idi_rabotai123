@@ -19,12 +19,7 @@ class _HomePageState extends State<HomePage> {
   bool isSearchBar = false;
 
   List pageList = const [VacancyPage(), ResponsesPage(), ProfilePage()];
-
-  void changeAppbar() {
-    setState(() {
-      isSearchBar = !isSearchBar;
-    });
-  }
+  List titleList = const [vacancy, responses, profile];
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +33,7 @@ class _HomePageState extends State<HomePage> {
   BottomNavigationBar bottomNavigationBar() {
     return BottomNavigationBar(
       items: const [
-        BottomNavigationBarItem(
-            icon: Icon(Icons.work_rounded), label: vacancy),
+        BottomNavigationBarItem(icon: Icon(Icons.work_rounded), label: vacancy),
         BottomNavigationBarItem(icon: Icon(Icons.favorite), label: responses),
         BottomNavigationBarItem(
             icon: Icon(Icons.account_circle_rounded), label: profile),
@@ -53,11 +47,13 @@ class _HomePageState extends State<HomePage> {
 
   AppBar regularAppbar() => AppBar(
         centerTitle: true,
-        title: const Text(vacancy),
+        title: Text(titleList[currentIndex]),
         actions: [
           IconButton(
               onPressed: () {
-                changeAppbar();
+                setState(() {
+                  isSearchBar = !isSearchBar;
+                });
               },
               icon: const Icon(
                 Icons.search_rounded,
@@ -69,19 +65,27 @@ class _HomePageState extends State<HomePage> {
 
   AppBar searchAppbar() => AppBar(
         centerTitle: true,
-        leading: const Icon(
-          Icons.search_rounded,
-          color: accentColor,
-          size: 30,
-        ),
         title: TextField(
-          controller: searchController,
-          style: labelTextStyle2,
-        ),
+            controller: searchController,
+            style: labelTextStyle2,
+            cursorColor: accentColor,
+            decoration: InputDecoration(
+              prefixIcon: const Icon(
+                Icons.search_rounded,
+                color: accentColor,
+              ),
+              hintText: "Поиск",
+              hintStyle: labelTextStyle2,
+              focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: accentColor),
+              ),
+            )),
         actions: [
           IconButton(
               onPressed: () {
-                changeAppbar();
+                setState(() {
+                  isSearchBar = !isSearchBar;
+                });
                 searchController.text = "";
               },
               icon: const Icon(
