@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:idi_rabotai123/constants/colors.dart';
+import 'package:idi_rabotai123/constants/strings.dart';
 import 'package:idi_rabotai123/themes.dart';
 
 class AuthorizationPage extends StatefulWidget {
@@ -20,6 +22,7 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -32,25 +35,59 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     height: 10,
                   ),
                   TextField(
+                    style: labelTextStyle2,
+                    cursorColor: accentColor,
                     controller: loginController,
                     decoration: InputDecoration(
                         label: const Text(
-                          "Логин",
+                          login,
                         ),
                         labelStyle: labelTextStyle2,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: accentColor2),
+                            borderRadius: BorderRadius.circular(15)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: accentColor),
+                            borderRadius: BorderRadius.circular(15)),
+                        prefixIcon: const Icon(
+                          Icons.email_rounded,
+                          color: accentColor,
+                        )),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   TextField(
+                    style: labelTextStyle2,
+                    cursorColor: accentColor,
+                    obscureText: true,
                     controller: passwordController,
                     decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          icon: const Icon(
+                            Icons.visibility,
+                            color: accentColor,
+                          ),
+                          onPressed: () {},
+                        ),
                         label: const Text(
-                          "Пароль",
+                          password,
                         ),
                         labelStyle: labelTextStyle2,
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15))),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: accentColor2),
+                            borderRadius: BorderRadius.circular(15)),
+                        enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color: accentColor),
+                            borderRadius: BorderRadius.circular(15)),
+                        prefixIcon: const Icon(
+                          Icons.password_rounded,
+                          color: accentColor,
+                        )),
                   ),
                   const SizedBox(
                     height: 10,
@@ -62,13 +99,14 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                           style: accentedButton,
                           onPressed: () {},
                           child: Text(
-                            "Войти",
+                            toLogIn,
                             style: labelTextStyle,
                           )),
                       GestureDetector(
-                          onTap: () {},
+                          onTap: () =>
+                              Navigator.popAndPushNamed(context, '/reg'),
                           child: Text(
-                            "Нет аккаунта?",
+                            toRegist,
                             style: labelTextStyle,
                           ))
                     ],
