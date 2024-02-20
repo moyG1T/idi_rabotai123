@@ -15,7 +15,7 @@ ThemeData darkTheme = ThemeData(
         unselectedLabelStyle: labelTextStyle));
 
 TextStyle headerTextStyle =
-    const TextStyle(fontSize: 30, fontFamily: 'Open Sans', color: accentColor);
+    const TextStyle(fontSize: 26, fontFamily: 'Open Sans', color: accentColor);
 
 TextStyle labelTextStyle =
     const TextStyle(fontSize: 14, fontFamily: 'Open Sans', color: accentColor);

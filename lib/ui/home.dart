@@ -27,6 +27,16 @@ class _HomePageState extends State<HomePage> {
       appBar: isSearchBar ? searchAppbar() : regularAppbar(),
       body: pageList[currentIndex],
       bottomNavigationBar: bottomNavigationBar(),
+      floatingActionButton: currentIndex == 2
+          ? FloatingActionButton(
+              backgroundColor: lightColor,
+              onPressed: () {},
+              child: const Icon(
+                Icons.person_pin_rounded,
+                color: accentColor,
+              ),
+            )
+          : null,
     );
   }
 
@@ -49,17 +59,27 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
         title: Text(titleList[currentIndex]),
         actions: [
-          IconButton(
-              onPressed: () {
-                setState(() {
-                  isSearchBar = !isSearchBar;
-                });
-              },
-              icon: const Icon(
-                Icons.search_rounded,
-                color: accentColor,
-                size: 30,
-              ))
+          currentIndex != 2
+              ? IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isSearchBar = !isSearchBar;
+                    });
+                  },
+                  icon: const Icon(
+                    Icons.search_rounded,
+                    color: accentColor,
+                    size: 26,
+                  ))
+              : IconButton(
+                  onPressed: () {
+                    Navigator.popAndPushNamed(context, '/');
+                  },
+                  icon: const Icon(
+                    Icons.exit_to_app_rounded,
+                    color: accentColor,
+                    size: 26,
+                  )),
         ],
       );
 
@@ -73,7 +93,20 @@ class _HomePageState extends State<HomePage> {
               prefixIcon: const Icon(
                 Icons.search_rounded,
                 color: accentColor,
+                size: 26,
               ),
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isSearchBar = !isSearchBar;
+                    });
+                    searchController.text = "";
+                  },
+                  icon: const Icon(
+                    Icons.cancel_rounded,
+                    color: accentColor,
+                    size: 26,
+                  )),
               hintText: "Поиск",
               hintStyle: labelTextStyle2,
               focusedBorder: const UnderlineInputBorder(
@@ -82,23 +115,11 @@ class _HomePageState extends State<HomePage> {
             )),
         actions: [
           IconButton(
-              onPressed: () {
-                setState(() {
-                  isSearchBar = !isSearchBar;
-                });
-                searchController.text = "";
-              },
-              icon: const Icon(
-                Icons.cancel_rounded,
-                color: accentColor,
-                size: 30,
-              )),
-          IconButton(
               onPressed: () {},
               icon: const Icon(
                 Icons.tune_rounded,
                 color: accentColor,
-                size: 30,
+                size: 26,
               ))
         ],
       );

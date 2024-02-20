@@ -32,19 +32,19 @@ class VacancyPage extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: MediaQuery.of(context).size.height * 0.3,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              vacancyList[index].title! + index.toString(),
+                              "${vacancyList[index].title!} ${index.toString()}",
                               style: labelTextStyle2,
                             ),
                             Text(
                               vacancyList[index].salary == null
                                   ? "Бесплатно"
-                                  : vacancyList[index].salary.toString(),
+                                  : "${vacancyList[index].salary!} руб.",
                               style: labelTextStyle2,
                             )
                           ],
@@ -59,17 +59,21 @@ class VacancyPage extends StatelessWidget {
                             style: labelTextStyle,
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ElevatedButton(
-                                style: accentedButton,
-                                onPressed: () {},
-                                child: Text(
-                                  toResponse,
-                                  style: labelTextStyle2,
-                                ))
-                          ],
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                  style: accentedButton,
+                                  onPressed: () {},
+                                  child: Text(
+                                    toResponse,
+                                    style: labelTextStyle,
+                                  ))
+                            ],
+                          ),
                         )
                       ],
                     ),

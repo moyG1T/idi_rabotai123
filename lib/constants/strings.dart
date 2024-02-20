@@ -14,3 +14,5 @@ const String patronymic = "Отчество";
 const String telephone = "Телефон";
 
 const String toResponse = "Откликнуться";
+
+const String text = "ш4кцпрщхууууууупкуовсотчипутапджуцкапуджщцлкрдж";
