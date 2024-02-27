@@ -7,12 +7,9 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return Center(
       child: Column(
         children: [
-          const Divider(
-            color: accentColor3,
-          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.15,
             child: Card(
@@ -42,9 +39,13 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
           ),
-          const Divider(
-            color: accentColor3,
-          )
+          ListView(
+            children: const [
+              ListTile(
+                title: Text("asd"),
+              )
+            ],
+          ),
         ],
       ),
     );
