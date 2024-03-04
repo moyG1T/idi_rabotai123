@@ -1,10 +1,14 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
 import 'package:idi_rabotai123/constants/strings.dart';
+import 'package:idi_rabotai123/database/firebaseAuth/user_service.dart';
 import 'package:idi_rabotai123/themes.dart';
 import 'package:idi_rabotai123/ui/pages/profile.dart';
 import 'package:idi_rabotai123/ui/pages/responses.dart';
 import 'package:idi_rabotai123/ui/pages/vacancy.dart';
+import 'package:toast/toast.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,6 +19,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   TextEditingController searchController = TextEditingController();
+  AuthService authService = AuthService();
   int currentIndex = 0;
   bool isSearchBar = false;
 
@@ -23,6 +28,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Scaffold(
       appBar: isSearchBar ? searchAppbar() : regularAppbar(),
       body: pageList[currentIndex],
@@ -72,8 +78,10 @@ class _HomePageState extends State<HomePage> {
                     size: 26,
                   ))
               : IconButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    await authService.logOut();
                     Navigator.popAndPushNamed(context, '/');
+                    Toast.show("Anti Masturbeck");
                   },
                   icon: const Icon(
                     Icons.exit_to_app_rounded,

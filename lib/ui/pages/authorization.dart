@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
 import 'package:idi_rabotai123/constants/strings.dart';
+import 'package:idi_rabotai123/database/firebaseAuth/user_service.dart';
 import 'package:idi_rabotai123/themes.dart';
+import 'package:toast/toast.dart';
 
 class AuthorizationPage extends StatefulWidget {
   const AuthorizationPage({super.key});
@@ -14,8 +18,13 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
   TextEditingController loginController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  AuthService authService = AuthService();
+
+  bool isPasswordRevealed = false;
+
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Scaffold(
       body: SafeArea(
         child: Center(
@@ -35,9 +44,9 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     height: 10,
                   ),
                   TextField(
+                    controller: loginController,
                     style: labelTextStyle2,
                     cursorColor: accentColor,
-                    controller: loginController,
                     decoration: InputDecoration(
                         label: const Text(
                           login,
@@ -60,17 +69,27 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     height: 10,
                   ),
                   TextField(
+                    controller: passwordController,
                     style: labelTextStyle2,
                     cursorColor: accentColor,
-                    obscureText: true,
-                    controller: passwordController,
+                    obscureText: !isPasswordRevealed,
+                    obscuringCharacter: '*',
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
-                          icon: const Icon(
-                            Icons.visibility,
-                            color: accentColor,
-                          ),
-                          onPressed: () {},
+                          icon: !isPasswordRevealed
+                              ? const Icon(
+                                  Icons.visibility,
+                                  color: accentColor,
+                                )
+                              : const Icon(
+                                  Icons.visibility_off_rounded,
+                                  color: accentColor,
+                                ),
+                          onPressed: () {
+                            setState(() {
+                              isPasswordRevealed = !isPasswordRevealed;
+                            });
+                          },
                         ),
                         label: const Text(
                           password,
@@ -97,8 +116,22 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                     children: [
                       ElevatedButton(
                           style: accentedButton,
-                          onPressed: () =>
-                              Navigator.popAndPushNamed(context, '/home'),
+                          onPressed: () async {
+                            if (loginController.text.isEmpty ||
+                                passwordController.text.isEmpty) {
+                              Toast.show("Mr. Penus");
+                            } else {
+                              var user = await authService.signIn(
+                                  loginController.text,
+                                  passwordController.text);
+                              if (user == null) {
+                                Toast.show("Masturbist");
+                              } else {
+                                Navigator.popAndPushNamed(context, '/');
+                                Toast.show('Masturbeck');
+                              }
+                            }
+                          },
                           child: Text(
                             toLogIn,
                             style: labelTextStyle,
