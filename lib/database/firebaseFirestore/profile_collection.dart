@@ -42,6 +42,16 @@ class ProfileCollection {
     }
   }
 
+  Future<void> editProfileImage(dynamic docs, String image) async {
+    try {
+      await _firebaseFirestore.collection('profiles').doc(docs.id).update({
+        'image': image,
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
   Future<void> deleteProfile(dynamic docs) async {
     try {
       await _firebaseFirestore.collection("profiles").doc(docs.id).delete();

@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
               backgroundColor: lightColor,
               onPressed: () {},
               child: const Icon(
-                Icons.person_pin_rounded,
+                Icons.add,
                 color: accentColor,
               ),
             )
