@@ -36,7 +36,9 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: currentIndex == 2
           ? FloatingActionButton(
               backgroundColor: lightColor,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/add_resume');
+              },
               child: const Icon(
                 Icons.add,
                 color: accentColor,

@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
 import 'package:idi_rabotai123/database/firebaseFirestore/profile_collection.dart';
 import 'package:idi_rabotai123/database/firebaseStorage/image_storage.dart';
@@ -56,35 +55,97 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget resumeCard(context, dynamic docs) {
-    return Card(
-        color: lightColor2,
-        child: ListTile(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(docs['position'], style: labelTextStyle),
-              Text(docs['salary'], style: labelTextStyle)
-            ],
-          ),
-          subtitle: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                docs['surname'],
-                style: labelTextStyle,
-              ),
-              Text(docs['name'], style: labelTextStyle),
-              Text(docs['patronymic'], style: labelTextStyle),
-              Text(docs['email'], style: labelTextStyle),
-              Text(docs['phone'], style: labelTextStyle),
-              const Expanded(
-                child: Divider(
+    return SizedBox(
+      height: MediaQuery.of(context).size.height * 0.3,
+      child: Card(
+          color: lightColor2,
+          child: ListTile(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(docs['position'] ?? "Не важно", style: labelTextStyle2),
+                Text(docs['salary'] ?? "Любая", style: labelTextStyle2)
+              ],
+            ),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                const Divider(
                   color: accentColor3,
                 ),
-              )
-            ],
-          ),
-        ));
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "ФИО:",
+                      style: labelTextStyle,
+                    ),
+                    Text(
+                      "${docs['surname'] ?? ""} ${docs['name'] ?? ""} ${docs['patronymic'] ?? ""}",
+                      style: labelTextStyle,
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Тел.:",
+                      style: labelTextStyle,
+                    ),
+                    Text(docs['phone'] ?? "-", style: labelTextStyle),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Почта:",
+                      style: labelTextStyle,
+                    ),
+                    Text(docs['email'] ?? "-", style: labelTextStyle),
+                  ],
+                ),
+                const Divider(
+                  color: accentColor3,
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "Обо мне:",
+                    style: labelTextStyle,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    docs['description'],
+                    style: labelTextStyle,
+                  ),
+                ),
+                const Divider(
+                  color: accentColor3,
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        docs['date'],
+                        style: labelTextStyle,
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.popAndPushNamed(context, '/add_resume');
+                          },
+                          icon: const Icon(
+                            Icons.edit_rounded,
+                            color: accentColor,
+                          ))
+                    ]),
+              ],
+            ),
+          )),
+    );
   }
 
   @override
@@ -141,10 +202,10 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         Text(
-          "Ваши рюземе",
+          "Ваши резюме",
           style: labelTextStyle2,
         ),
-        StreamBuilder<Object>(
+        StreamBuilder(
             stream: FirebaseFirestore.instance
                 .collection('profiles')
                 .doc(userId)
@@ -157,10 +218,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 );
               } else {
                 return ListView.builder(
-                  // itemCount: snapshot.data!.docs.length,
-                  itemCount: 5,
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.docs.length,
                   itemBuilder: (context, index) =>
-                      resumeCard(context, snapshot),
+                      resumeCard(context, snapshot.data!.docs[index]),
                 );
               }
             })
