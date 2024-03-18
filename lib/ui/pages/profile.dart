@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
 import 'package:idi_rabotai123/database/firebaseFirestore/profile_collection.dart';
+import 'package:idi_rabotai123/database/firebaseFirestore/resume_collection.dart';
 import 'package:idi_rabotai123/database/firebaseStorage/image_storage.dart';
 import 'package:idi_rabotai123/themes.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +24,8 @@ class _ProfilePageState extends State<ProfilePage> {
   XFile? fileName;
   ImageStorage imageStorage = ImageStorage();
   ProfileCollection profileCollection = ProfileCollection();
+
+  ResumeCollection resumeCollection = ResumeCollection();
 
   selectImageGallery() async {
     final returnImage =
@@ -127,21 +130,33 @@ class _ProfilePageState extends State<ProfilePage> {
                   color: accentColor3,
                 ),
                 Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        docs['date'],
-                        style: labelTextStyle,
-                      ),
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      docs['date'],
+                      style: labelTextStyle,
+                    ),
+                    Row(children: [
                       IconButton(
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, '/add_resume');
+                            Navigator.popAndPushNamed(context, '/add_resume',
+                                arguments: docs);
                           },
                           icon: const Icon(
                             Icons.edit_rounded,
                             color: accentColor,
+                          )),
+                      IconButton(
+                          onPressed: () async {
+                            await resumeCollection.removeResume(docs);
+                          },
+                          icon: const Icon(
+                            Icons.delete_rounded,
+                            color: accentColor,
                           ))
                     ]),
+                  ],
+                ),
               ],
             ),
           )),
@@ -150,83 +165,102 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.12,
-          child: Card(
-            color: lightColor2,
-            child: Center(
-              child: ListTile(
-                leading: userDoc['image'] == ''
-                    ? IconButton(
-                        onPressed: () async {
-                          selectImageGallery();
-                          if (selectImage != null) {
-                            pushStorage();
-                            await Future.delayed(const Duration(seconds: 4));
-                            await profileCollection.editProfileImage(
-                                userDoc, imageStorage.imagePathURL!);
-                            initState();
-                          } else {
-                            Toast.show('NO NO NO MISTER FISH');
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.add_photo_alternate_rounded,
-                          color: accentColor,
-                          size: 30,
-                        ))
-                    : CircleAvatar(
-                        backgroundImage: NetworkImage(userDoc['image']),
-                        radius: 30,
-                      ),
-                title: Text(
-                  "${userDoc['surname']} ${userDoc['patronymic'].trim().split(' ').map((l) => l[0]).take(2).join()}. ${userDoc['name'].trim().split(' ').map((l) => l[0]).take(2).join()}.",
-                  style: labelTextStyle2,
-                ),
-                subtitle: Text(
-                  "+7 (927) 479-96-25",
-                  style: labelTextStyle,
-                ),
-                trailing: IconButton(
-                  icon: const Icon(
-                    Icons.copy_rounded,
-                    color: accentColor,
-                    size: 30,
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.12,
+            child: Card(
+              color: lightColor2,
+              child: Center(
+                child: ListTile(
+                  leading: userDoc['image'] == ''
+                      ? IconButton(
+                          onPressed: () async {
+                            selectImageGallery();
+                            if (selectImage != null) {
+                              pushStorage();
+                              await Future.delayed(const Duration(seconds: 4));
+                              await profileCollection.editProfileImage(
+                                  userDoc, imageStorage.imagePathURL!);
+                              initState();
+                            } else {
+                              Toast.show('NO NO NO MISTER FISH');
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.add_photo_alternate_rounded,
+                            color: accentColor,
+                            size: 30,
+                          ))
+                      : GestureDetector(
+                          onTap: () async {
+                            selectImageGallery();
+                            if (selectImage != null) {
+                              pushStorage();
+                              await Future.delayed(const Duration(seconds: 4));
+                              await profileCollection.editProfileImage(
+                                  userDoc, imageStorage.imagePathURL!);
+                              initState();
+                            } else {
+                              Toast.show('NO NO NO MISTER FISH');
+                            }
+                          },
+                          child: CircleAvatar(
+                            backgroundImage: NetworkImage(userDoc['image']),
+                            radius: 30,
+                          ),
+                        ),
+                  title: Text(
+                    "${userDoc['surname']} ${userDoc['patronymic'].trim().split(' ').map((l) => l[0]).take(2).join()}. ${userDoc['name'].trim().split(' ').map((l) => l[0]).take(2).join()}.",
+                    style: labelTextStyle2,
                   ),
-                  onPressed: () {},
+                  subtitle: Text(
+                    "+7 (927) 479-96-25",
+                    style: labelTextStyle,
+                  ),
+                  trailing: IconButton(
+                    icon: const Icon(
+                      Icons.copy_rounded,
+                      color: accentColor,
+                      size: 30,
+                    ),
+                    onPressed: () {},
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-        Text(
-          "Ваши резюме",
-          style: labelTextStyle2,
-        ),
-        StreamBuilder(
-            stream: FirebaseFirestore.instance
-                .collection('profiles')
-                .doc(userId)
-                .collection('resumes')
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) =>
-                      resumeCard(context, snapshot.data!.docs[index]),
-                );
-              }
-            })
-      ],
+          Text(
+            "Ваши резюме",
+            style: labelTextStyle2,
+          ),
+          SizedBox(
+            child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection('profiles')
+                    .doc(userId)
+                    .collection('resumes')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    return ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) =>
+                          resumeCard(context, snapshot.data!.docs[index]),
+                    );
+                  }
+                }),
+          )
+        ],
+      ),
     );
   }
 }

@@ -31,4 +31,38 @@ class ResumeCollection {
       return;
     }
   }
+
+  Future<void> editResume(
+      String position, String salary, String description, dynamic docs) async {
+    try {
+      final String formattedDate =
+          DateFormat('dd-MM-yyyy').format(DateTime.now());
+      await _firebaseFirestore
+          .collection('profiles')
+          .doc(user)
+          .collection('resumes')
+          .doc(docs)
+          .update({
+        'position': position,
+        'salary': salary,
+        'description': description,
+        'date': formattedDate,
+      });
+    } catch (e) {
+      return;
+    }
+  }
+
+  Future<void> removeResume(dynamic docs) async {
+    try {
+      await _firebaseFirestore
+          .collection('profiles')
+          .doc(user)
+          .collection('resumes')
+          .doc(docs)
+          .delete();
+    } catch (e) {
+      return;
+    }
+  }
 }
