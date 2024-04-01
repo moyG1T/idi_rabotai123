@@ -41,7 +41,7 @@ class ResumeCollection {
           .collection('profiles')
           .doc(user)
           .collection('resumes')
-          .doc(docs)
+          .doc(docs.id)
           .update({
         'position': position,
         'salary': salary,
@@ -59,7 +59,7 @@ class ResumeCollection {
           .collection('profiles')
           .doc(user)
           .collection('resumes')
-          .doc(docs)
+          .doc(docs.id)
           .delete();
     } catch (e) {
       return;

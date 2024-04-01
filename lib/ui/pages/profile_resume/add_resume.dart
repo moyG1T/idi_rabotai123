@@ -46,9 +46,11 @@ class _AddResumePageState extends State<AddResumePage> {
   Widget build(BuildContext context) {
     resumeDoc = ModalRoute.of(context)?.settings.arguments as dynamic;
 
-    positionController.text = resumeDoc['position'];
-    salaryController.text = resumeDoc['salary'];
-    descController.text = resumeDoc['description'];
+    if (resumeDoc != null) {
+      positionController.text = resumeDoc['position'];
+      salaryController.text = resumeDoc['salary'];
+      descController.text = resumeDoc['description'];
+    }
 
     ToastContext().init(context);
 

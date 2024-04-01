@@ -33,8 +33,18 @@ class _HomePageState extends State<HomePage> {
       appBar: isSearchBar ? searchAppbar() : regularAppbar(),
       body: pageList[currentIndex],
       bottomNavigationBar: bottomNavigationBar(),
-      floatingActionButton: currentIndex == 2
+      floatingActionButton: currentIndex == 0
           ? FloatingActionButton(
+              backgroundColor: lightColor,
+              onPressed: () {
+                Navigator.popAndPushNamed(context, '/add_vacancy');
+              },
+              child: const Icon(
+                Icons.add,
+                color: accentColor,
+              ),
+            )
+          : FloatingActionButton(
               backgroundColor: lightColor,
               onPressed: () {
                 Navigator.popAndPushNamed(context, '/add_resume');
@@ -43,8 +53,7 @@ class _HomePageState extends State<HomePage> {
                 Icons.add,
                 color: accentColor,
               ),
-            )
-          : null,
+            ),
     );
   }
 

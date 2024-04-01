@@ -1,27 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 class VacancyCollection {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  Future<void> addVacancy(
-      String id,
-      String position,
-      String salary,
-      String description,
-      String publicationDate,
-      String schedule,
-      String profileId,
-      String groupName) async {
+  Future<void> addVacancy(String position, String salary, String description,
+      String schedule) async {
     try {
-      await _firebaseFirestore.collection("vacancies").doc(id).set({
-        'uid': id,
-        'position': position,
+      final String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+      final String formattedDate =
+          DateFormat('dd-MM-yyyy').format(DateTime.now());
+      await _firebaseFirestore.collection("vacancies").add({
+        'uid': uid,
+        'title': position,
         'salary': salary,
-        'description': description,
-        'publicationDate': publicationDate,
+        'desc': description,
+        'date': formattedDate,
         'schedule': schedule,
-        'profileId': profileId,
-        'groupName': groupName
       });
     } catch (e) {
       return;
