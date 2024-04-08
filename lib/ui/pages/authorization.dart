@@ -111,38 +111,81 @@ class _AuthorizationPageState extends State<AuthorizationPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  Column(
                     children: [
-                      ElevatedButton(
-                          style: accentedButton,
-                          onPressed: () async {
-                            if (loginController.text.isEmpty ||
-                                passwordController.text.isEmpty) {
-                              Toast.show("Mr. Penus");
-                            } else {
-                              var user = await authService.signIn(
-                                  loginController.text,
-                                  passwordController.text);
-                              if (user == null) {
-                                Toast.show("Masturbist");
-                              } else {
-                                Navigator.popAndPushNamed(context, '/');
-                                Toast.show('Masturbeck');
-                              }
-                            }
-                          },
-                          child: Text(
-                            toLogIn,
-                            style: labelTextStyle,
-                          )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                              style: accentedButton,
+                              onPressed: () async {
+                                if (loginController.text.isEmpty ||
+                                    passwordController.text.isEmpty) {
+                                  Toast.show("Mr. Penus");
+                                } else {
+                                  var user = await authService.signIn(
+                                      loginController.text,
+                                      passwordController.text);
+                                  if (user == null) {
+                                    Toast.show("Masturbist");
+                                  } else {
+                                    Navigator.popAndPushNamed(context, '/');
+                                    Toast.show('Masturbeck');
+                                  }
+                                }
+                              },
+                              child: Text(
+                                toLogIn,
+                                style: labelTextStyle,
+                              )),
+                          GestureDetector(
+                              onTap: () =>
+                                  Navigator.popAndPushNamed(context, '/'),
+                              child: Text(
+                                toRegist,
+                                style: labelTextStyle,
+                              )),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.6,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: accentColor,
+                                  indent:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                  endIndent:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                              ),
+                              Text(
+                                "или",
+                                style: labelTextStyle,
+                              ),
+                              Expanded(
+                                child: Divider(
+                                  color: accentColor,
+                                  indent:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                  endIndent:
+                                      MediaQuery.of(context).size.width * 0.02,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                       GestureDetector(
                           onTap: () =>
-                              Navigator.popAndPushNamed(context, '/reg'),
+                              Navigator.popAndPushNamed(context, '/edit_password'),
                           child: Text(
-                            toRegist,
+                            "Забыли пароль?",
                             style: labelTextStyle,
-                          ))
+                          )),
                     ],
                   )
                 ],
