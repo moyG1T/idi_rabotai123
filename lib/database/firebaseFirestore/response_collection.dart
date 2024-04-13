@@ -10,8 +10,20 @@ class ResponsesCollection {
 
       await _firebaseFirestore.collection('responses').add({
         'uid': uid,
-
+        'title': docs["title"],
+        'salary': docs["salary"],
+        'desc': docs["desc"],
+        'date': docs["date"],
+        'schedule': docs["schedule"],
+        'status': "Открыто"
       });
+    } catch (e) {
+      return;
+    }
+  }
+  Future<void> removeResponses(dynamic docs) async {
+    try {
+      await _firebaseFirestore.collection('responses').doc(docs.id).delete();
     } catch (e) {
       return;
     }

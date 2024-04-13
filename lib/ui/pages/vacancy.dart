@@ -4,11 +4,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
 import 'package:idi_rabotai123/constants/strings.dart';
+import 'package:idi_rabotai123/database/firebaseFirestore/response_collection.dart';
 import 'package:idi_rabotai123/themes.dart';
+import 'package:toast/toast.dart';
 
-class VacancyPage extends StatelessWidget {
+class VacancyPage extends StatefulWidget {
   const VacancyPage({super.key});
 
+  @override
+  State<VacancyPage> createState() => _VacancyPageState();
+}
+
+ResponsesCollection responsesCollection = ResponsesCollection();
+
+class _VacancyPageState extends State<VacancyPage> {
   Widget vacancyCard(context, dynamic docs) => Column(
         children: [
           SizedBox(
@@ -62,7 +71,10 @@ class VacancyPage extends StatelessWidget {
                       ),
                       ElevatedButton(
                           style: accentedButton,
-                          onPressed: () {},
+                          onPressed: () {
+                            responsesCollection.addResponses(docs);
+                            Toast.show("Oklik"); 
+                          },
                           child: Text(
                             toResponse,
                             style: labelTextStyle,
@@ -81,6 +93,7 @@ class VacancyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ToastContext().init(context);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,

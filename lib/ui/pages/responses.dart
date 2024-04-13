@@ -1,20 +1,20 @@
 // ignore_for_file: depend_on_referenced_packages
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:idi_rabotai123/constants/colors.dart';
-import 'package:idi_rabotai123/data/response.dart';
 import 'package:idi_rabotai123/themes.dart';
-import 'package:intl/intl.dart';
 
-class ResponsesPage extends StatelessWidget {
+class ResponsesPage extends StatefulWidget {
   const ResponsesPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(),
-      itemCount: responseList.length,
-      itemBuilder: (context, index) => Column(
+  State<ResponsesPage> createState() => _ResponsesPageState();
+}
+final String uid = FirebaseAuth.instance.currentUser!.uid.toString();
+class _ResponsesPageState extends State<ResponsesPage> {
+  Widget responseCard(context, dynamic docs) => Column(
         children: [
           const SizedBox(
             height: 5,
@@ -28,48 +28,47 @@ class ResponsesPage extends StatelessWidget {
             width: MediaQuery.of(context).size.width * 0.9,
             height: MediaQuery.of(context).size.height * 0.3,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      responseList[index].vacancy!.title!,
-                      style: labelTextStyle2,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          docs['title'],
+                          style: labelTextStyle2,
+                        ),
+                        Text(
+                          "${docs['salary']} руб.",
+                          style: labelTextStyle2,
+                        )
+                      ],
                     ),
-                    Text(
-                      responseList[index].vacancy!.salary == null
-                          ? "Бесплатно"
-                          : "${responseList[index].vacancy!.salary!} руб.",
-                      style: labelTextStyle2,
-                    )
+                    const Divider(
+                      color: accentColor3,
+                    ),
+                    SizedBox(
+                      child: Text(
+                        docs['desc'],
+                        style: labelTextStyle,
+                      ),
+                    ),
                   ],
                 ),
-                const Divider(
-                  color: accentColor3,
-                ),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  child: Text(
-                    "wefrkjlbajlbhashbvjdsavjhdsavhjdasvhjadsvhjdsavjhdsavhjdasvjkhasdhjxzc,jkadwshui;acxkmbaswefrkjlbajlbhashbvjdsavjhdsavhjdasvhjadsvhjdsavjhdsavhjdasvjkhasdhjxzc,jkadwshui;acxkmbas",
-                    style: labelTextStyle,
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.1,
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        responseList[index].status! ? "Принято" : "Отказано",
+                        docs['date'],
                         style: labelTextStyle,
                       ),
                       Text(
-                        DateFormat('yyyy-MM-dd - kk:mm')
-                            .format(responseList[index].date!),
+                        docs['status'],
                         style: labelTextStyle,
-                      )
+                      ),
                     ],
                   ),
                 )
@@ -80,7 +79,32 @@ class ResponsesPage extends StatelessWidget {
             height: 5,
           ),
         ],
-      ),
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: deepColor,
+      child: StreamBuilder(
+          stream:
+              FirebaseFirestore.instance.collection('responses').snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              var responses = snapshot.data!.docs.where((e) => e['uid'] == uid).toList();
+              return ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: responses.length,
+                  itemBuilder: (context, index) =>
+                      responseCard(context, responses[index]));
+            }
+          }),
     );
   }
 }
